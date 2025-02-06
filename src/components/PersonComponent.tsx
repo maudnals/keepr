@@ -7,7 +7,8 @@ interface PersonComponentProps {
 }
 
 export default function PersonComponent({ person }: PersonComponentProps) {
-  const { name, isOverdue, diff, targetCheckinFrequency, ratio } = person;
+  const { name, isCheckinOverdue, diff, targetCheckinFrequency, overdueRatio } =
+    person;
   const isDiffInDaysPlural = (diff: number) => Math.abs(diff) > 1;
   const dayCountDisplay = `day${isDiffInDaysPlural(diff) ? "s" : ""}`;
   return (
@@ -16,8 +17,8 @@ export default function PersonComponent({ person }: PersonComponentProps) {
         <Grid container spacing={1}>
           <Grid size={3}>{name}</Grid>
           <Grid size={5}>
-            {isOverdue
-              ? `${ratio}% (${diff} ${dayCountDisplay})`
+            {isCheckinOverdue
+              ? `${overdueRatio}% (${diff} ${dayCountDisplay})`
               : `${diff} ${dayCountDisplay}`}
           </Grid>
           <Grid size={4}>{targetCheckinFrequency}</Grid>
