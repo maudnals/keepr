@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖤</text></svg>"
+    />
+    <title>keepr</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="/src/api-config/secrets.tsx"></script>
+    <script src="/src/api-config/config.tsx"></script>
+    <script type="text/javascript">
+      let tokenClient;
+      let gapiInited = false;
+      let gisInited = false;
+
+      // Callback after api.js is loaded
+      function gapiLoaded() {
+        gapi.load("client", initializeGapiClient);
+      }
+
+      // Callback after the API client is loaded. Loads the discovery doc to initialize the API
+      async function initializeGapiClient() {
+        await gapi.client.init({
+          apiKey: API_KEY,
+          discoveryDocs: [DISCOVERY_DOC],
+        });
+        gapiInited = true;
+      }
+
+      // Callback after Google Identity Services are loaded
+      function gisLoaded() {
+        console.log(CLIENT_ID);
+        tokenClient = google.accounts.oauth2.initTokenClient({
+          client_id: CLIENT_ID,
+          scope: SCOPES,
+          callback: "", // defined later
+        });
+        gisInited = true;
+      }
+    </script>
+    <script
+      src="https://apis.google.com/js/api.js"
+      onload="gapiLoaded()"
+    ></script>
+    <script
+      src="https://accounts.google.com/gsi/client"
+      onload="gisLoaded()"
+    ></script>
+    <script async defer type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
