@@ -24,28 +24,28 @@ export const frequencyToDays = {
 //   weekly,
 // }
 
-export const keeprPpties = {
+export const KEEPR_PPTIES = {
   lastCheckin: "lastCheckin",
   targetCheckinFrequency: "targetCheckinFrequency",
 };
 
-const keeprPptyValues = Object.values(keeprPpties);
+const keeprPptyValues = Object.values(KEEPR_PPTIES);
 
 export const validatorsParsers = {
-  [keeprPpties.lastCheckin]: function (
-    lastCheckinDateValue: string,
+  [KEEPR_PPTIES.lastCheckin]: function (
+    lastCheckinValue: string,
     resourceName: string
   ) {
-    const parsedDate = Date.parse(lastCheckinDateValue);
+    const parsedDate = Date.parse(lastCheckinValue);
     if (Number.isNaN(parsedDate)) {
       throw new Error(
-        `Error during data pulling for ${resourceName}: lastCheckinDate '${lastCheckinDateValue}' is invalid.`
+        `Error during data pulling for ${resourceName}: lastCheckin '${lastCheckinValue}' is invalid.`
       );
     } else {
       return new Date(parsedDate);
     }
   },
-  [keeprPpties.targetCheckinFrequency]: function (
+  [KEEPR_PPTIES.targetCheckinFrequency]: function (
     targetCheckinFrequencyValue: Frequency,
     resourceName: string
   ) {
@@ -60,15 +60,26 @@ export const validatorsParsers = {
 };
 
 export function getOverdueDetails(now: number, person: Person) {
-  const gapInMs = new Date(now).getTime() - person.lastCheckin.getTime();
-  // Use Math.floor to be lax on checkin (laxer than Math.ceiling)
-  const gapInDays = Math.floor(gapInMs / (24 * 3600 * 1000));
-  const targetGapInDays = frequencyToDays[person.targetCheckinFrequency];
-  const diff = Math.abs(gapInDays - targetGapInDays);
+  let diff = null;
+  let isCheckinOverdue = false;
+  let overdueRatio = null;
+
+  console.log(person.targetCheckinFrequency);
+
+  if (person.targetCheckinFrequency && person.lastCheckin) {
+    const gapInMs = new Date(now).getTime() - person.lastCheckin.getTime();
+    // Use Math.floor to be lax on checkin (laxer than Math.ceiling)
+    const gapInDays = Math.floor(gapInMs / (24 * 3600 * 1000));
+    const targetGapInDays = frequencyToDays[person.targetCheckinFrequency];
+    diff = Math.abs(gapInDays - targetGapInDays);
+    isCheckinOverdue = gapInDays > targetGapInDays;
+    overdueRatio = Math.round(100 / (targetGapInDays / diff));
+  }
+
   return {
-    isCheckinOverdue: gapInDays > targetGapInDays,
-    diff: diff,
-    overdueRatio: Math.round(100 / (targetGapInDays / diff)),
+    isCheckinOverdue,
+    diff,
+    overdueRatio,
     // const x =
     // 0 days for 30 -> 0%
     // 15 days overdue for 30 -> 50%
@@ -81,30 +92,50 @@ export function createPersonFromConnection(
   connection: Connection,
   now: number
 ) {
-  if (
-    !connection.userDefined ||
-    !connection.resourceName ||
-    !connection.names[0]?.displayName
-  ) {
+  if (!connection.resourceName || !connection.names) {
     return null;
   }
   let person: Person = {
     resourceName: connection.resourceName,
-    name: connection.names[0].displayName,
+    etag: connection.etag,
+    name: connection.names[0]
+      ? connection?.names[0]?.displayName
+      : "placeholder",
     isCheckinOverdue: false,
     diff: 0,
-    targetCheckinFrequency: "yearly",
-    lastCheckin: new Date(),
+    // TODO order: place unset at the bottom? alo, should we really reorder upon edit? could be confusing
+    targetCheckinFrequency: null,
+    lastCheckin: null,
     overdueRatio: 0,
+    userDefinedRaw: connection.userDefined,
   };
-  connection.userDefined.forEach((entry) => {
-    const { key, value } = entry;
-    if (keeprPptyValues.includes(value)) {
-      const parsed = validatorsParsers[value](key, person.resourceName);
-      person = { ...person, [value]: parsed };
-    }
-  });
+  if (connection.userDefined) {
+    connection.userDefined.forEach((entry) => {
+      const { key, value } = entry;
+      if (keeprPptyValues.includes(value)) {
+        const parsed = validatorsParsers[value](key, person.resourceName);
+        person = { ...person, [value]: parsed };
+      }
+    });
+  }
   const overdueDetails = getOverdueDetails(now, person);
   person = { ...person, ...overdueDetails };
   return person;
+}
+
+export function remainingDaysUntilCheckinFormatter(diff: number) {
+  return `${diff} ${numberOfDaysFormatter(diff)}`;
+}
+
+export function overdueRatioFormatter(overdueRatio: number, diff: number) {
+  let emoji = "";
+  if (overdueRatio > 100) {
+    emoji = "😓";
+  }
+  return `${emoji} ${overdueRatio}% (${diff} ${numberOfDaysFormatter(diff)})`;
+}
+
+export function numberOfDaysFormatter(numberOfDays: number) {
+  const isDaysPlural = (diff: number) => Math.abs(diff) > 1;
+  return `day${isDaysPlural(numberOfDays) ? "s" : ""}`;
 }
