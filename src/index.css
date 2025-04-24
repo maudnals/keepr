@@ -71,6 +71,18 @@ button:focus-visible {
   }
 }
 
-.dimmed {
-  opacity: .4;
+.MuiPaper-root {
+  --Paper-shadow: none !important;
+}
+
+button:focus {
+  border: none;
+  outline: none;
+}
+
+.MuiPaper-root.Mui-expanded {
+  margin: 0 !important;
+  background-color: whitesmoke;
+  border-top: solid 1px grey;
+  border-bottom: solid 1px grey;
 }
