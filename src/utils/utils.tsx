@@ -132,7 +132,7 @@ export function overdueRatioFormatter(overdueRatio: number, diff: number) {
   if (overdueRatio > 100) {
     emoji = "😓";
   }
-  return `${emoji} ${overdueRatio}% (${diff} ${numberOfDaysFormatter(diff)})`;
+  return `${overdueRatio}% (${diff} ${numberOfDaysFormatter(diff)}) ${emoji} `;
 }
 
 export function numberOfDaysFormatter(numberOfDays: number) {
