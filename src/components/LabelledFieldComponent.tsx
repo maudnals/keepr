@@ -10,7 +10,7 @@ export default function LabelledFieldComponent({
   value,
 }: LabelledFieldComponentProps) {
   return (
-    <div className="labelled-field">
+    <div className="labelled-field-wrapper">
       <div className="label">{label}</div>
       <div>{value}</div>
     </div>
