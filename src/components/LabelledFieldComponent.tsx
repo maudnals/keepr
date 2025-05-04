@@ -1,8 +1,9 @@
+import { ReactNode } from "react";
 import "./LabelledFieldComponent.css";
 
 interface LabelledFieldComponentProps {
   label: string;
-  value: string;
+  value: string | ReactNode;
 }
 
 export default function LabelledFieldComponent({
