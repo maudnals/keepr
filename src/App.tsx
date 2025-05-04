@@ -11,6 +11,7 @@ import { Close } from "@mui/icons-material";
 import PersonsListComponent from "./components/PersonsListComponent";
 import { createPersonFromConnection } from "./utils/utils";
 import { AUTH_BUTTON_TEXT } from "./strings";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const darkTheme = createTheme({
   palette: {
@@ -160,8 +161,7 @@ function App() {
           </a>
         </div>
         <h1>keepr</h1>
-        <Grid container spacing={2}>
-          <Grid size={6}>
+        <div className="sign-in">
             {localParams.tokenClient && localParams.gapi ? (
               <div>
                 <Button onClick={authenticateAndSetData} variant="contained">
@@ -171,15 +171,14 @@ function App() {
             ) : (
               <div>Not ready</div>
             )}
-          </Grid>
-          <Grid size={6}>
             {showSignoutButton && (
+            <div>
               <Button onClick={signout} variant="contained">
                 Sign out
               </Button>
+            </div>
             )}
-          </Grid>
-        </Grid>
+        </div>
         {/* Only show the UI when Authorized has been clicked i.e. a valid token is available */}
         {localParams.gapi.client.getToken() && (
           <>
