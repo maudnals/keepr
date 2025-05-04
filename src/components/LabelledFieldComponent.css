@@ -1,5 +1,6 @@
 .labelled-field-wrapper {
     display: flex;
+    align-items: center;
 }
 
 .label {
