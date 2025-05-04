@@ -21,7 +21,6 @@ export default function EditableDateComponent({
       {/* <div>{lastCheckin ? lastCheckin.toDateString() : "N/A"}</div> */}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
-          // label="Last checked in"
           value={dateValue}
           onChange={(newValue) => {
             setDate(dayjs(newValue));
