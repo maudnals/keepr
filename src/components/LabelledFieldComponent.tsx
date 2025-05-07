@@ -3,6 +3,7 @@ import "./LabelledFieldComponent.css";
 
 interface LabelledFieldComponentProps {
   label: string;
+  // Can pass a React component as a prop to embed it
   value: string | ReactNode;
 }
 
