@@ -1,9 +1,9 @@
-.labelled-field-wrapper {
-    display: flex;
-    align-items: center;
-}
-
 .label {
     opacity: .4;
     margin-right: 1ch;
+}
+
+.labelled-field-wrapper {
+    display: flex;
+    align-items: center;
 }
