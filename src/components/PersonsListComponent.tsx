@@ -5,12 +5,11 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 
 interface PersonsListComponentProps {
-  updateData: Function;
+  updateData: () => void;
   personsList: Person[];
   listTitle: string;
-  listTitleColor: "error" | "success" | "primary";
+  status: "error" | "success";
   emptyStateText: string;
-  columnHeaders: string[];
 }
 
 export default function PersonsListComponent({
