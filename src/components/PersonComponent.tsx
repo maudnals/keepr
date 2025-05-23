@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import Stack from "@mui/material/Stack";
@@ -16,6 +16,12 @@ import {
   remainingDaysUntilCheckinFormatter,
 } from "../utils/utils";
 import Button from "@mui/material/Button";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LabelledFieldComponent from "./LabelledFieldComponent";
+import EditableDateComponent from "./EditableDateComponent";
 
 interface PersonComponentProps {
   person: Person;
@@ -41,19 +47,25 @@ export default function PersonComponent({
     userDefinedRaw,
   } = person;
 
-  const [editModeForDate, setEditModeForDate] = useState(false);
-  const [lastCheckinInputValue, setLastCheckinInputValue] = useState(
-    lastCheckin ? dayjs(new Date(lastCheckin)) : null
-  );
+  // const [lastCheckinInputValue, setLastCheckinInputValue] = useState(
+  //   lastCheckin ? dayjs(new Date(lastCheckin)) : null
+  // );
   const [editModeForTargetFrequency, setEditModeForTargetFrequency] =
     useState(false);
   const [targetFrequencyInputValue, setTargetFrequencyInputValue] = useState(
     targetCheckinFrequency
   );
 
-  function exitDateEdit() {
-    setEditModeForDate(false);
-  }
+  // useEffect(() => {
+  //   console.log(lastCheckinInputValue);
+  //   console.log(lastCheckinInputValue);
+  //   updateUserDefinedPpty(
+  //     resourceName,
+  //     etag,
+  //     KEEPR_PPTIES.lastCheckin,
+  //     lastCheckinInputValue.toDate().toDateString() // 'Sat Feb 15 2025'
+  //   );
+  // }, [lastCheckinInputValue]);
 
   function exitTargetFrequencyEdit() {
     setEditModeForTargetFrequency(false);
@@ -74,13 +86,13 @@ export default function PersonComponent({
   function saveDateAndClose() {
     // resourceName = 'people/c1234567890'
     // updateDate(resourceName, etag);
-    updateUserDefinedPpty(
-      resourceName,
-      etag,
-      KEEPR_PPTIES.lastCheckin,
-      lastCheckinInputValue.toDate().toDateString() // 'Sat Feb 15 2025'
-    );
-    setEditModeForDate(false);
+    // console.log(lastCheckinInputValue);
+    // updateUserDefinedPpty(
+    //   resourceName,
+    //   etag,
+    //   KEEPR_PPTIES.lastCheckin,
+    //   lastCheckinInputValue.toDate().toDateString() // 'Sat Feb 15 2025'
+    // );
   }
 
   function saveTargetFrequencyAndClose() {
@@ -237,131 +249,130 @@ export default function PersonComponent({
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid
-          container
-          spacing={1}
-          sx={{
-            justifyContent: "space-around",
-            alignItems: "center",
-          }}
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
         >
-          <Grid size={3}>
-            {name}
-            {devMode && etag}
-            <Button onClick={updateLastCheckinDateToToday} variant="outlined">
-              CHECK!
-            </Button>
+          <Grid container size="grow">
+            <Grid size={6}>
+              {name}
+              {devMode && etag}
+            </Grid>
+            <Grid size={6}>
+              <Button onClick={updateLastCheckinDateToToday} variant="outlined">
+                Done
+              </Button>
+            </Grid>
           </Grid>
-          <Grid size={3}>
-            {targetCheckinFrequency
-              ? isCheckinOverdue
-                ? overdueRatioFormatter(overdueRatio, diff)
-                : remainingDaysUntilCheckinFormatter(diff)
-              : "N/A"}
-          </Grid>
-          <Grid size={3}>
-            <Stack
-              direction="row"
+        </AccordionSummary>
+        <AccordionDetails>
+          <LabelledFieldComponent
+            label={isCheckinOverdue ? "Overdue by" : "Next check in due in..."}
+            value={
+              targetCheckinFrequency
+                ? isCheckinOverdue
+                  ? overdueRatioFormatter(overdueRatio, diff)
+                  : remainingDaysUntilCheckinFormatter(diff)
+                : "N/A"
+            }
+          />
+          <LabelledFieldComponent
+            label="Last check in"
+            value={
+              <EditableDateComponent
+                dateValue={lastCheckin ? dayjs(new Date(lastCheckin)) : null}
+                setDate={(inputValue) => {
+                  updateUserDefinedPpty(
+                    resourceName,
+                    etag,
+                    KEEPR_PPTIES.lastCheckin,
+                    inputValue.toDate().toDateString() // 'Sat Feb 15 2025'
+                  );
+                  // setLastCheckinInputValue(dayjs(lastCheckinInputValue));
+                  // saveDateAndClose();
+                }}
+              />
+            }
+          />
+          <LabelledFieldComponent
+            label="Target checkin frequency"
+            value={
+              <Select
+                id="target-frequency"
+                value={targetCheckinFrequency ? targetCheckinFrequency : null}
+                onChange={(event) => {
+                  setTargetFrequencyInputValue(event.target.value as Frequency);
+                }}
+                label="frequency"
+              >
+                {/* <MenuItem value={null}>Unset</MenuItem> */}
+                <MenuItem value={"weekly"}>Weekly</MenuItem>
+                <MenuItem value={"fortnightly"}>Fortnightly</MenuItem>
+                <MenuItem value={"monthly"}>Monthly</MenuItem>
+                <MenuItem value={"yearly"}>Yearly</MenuItem>
+              </Select>
+            }
+          />
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid
+              container
               spacing={1}
               sx={{
                 justifyContent: "space-around",
                 alignItems: "center",
               }}
             >
-              <div>{lastCheckin ? lastCheckin.toDateString() : "N/A"}</div>
-              {editModeForDate && (
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Last checked in"
-                    value={lastCheckinInputValue}
-                    onChange={(newValue) =>
-                      setLastCheckinInputValue(dayjs(newValue))
-                    }
-                    disableFuture
-                  />
-                </LocalizationProvider>
-              )}
-              {editModeForDate ? (
-                <>
-                  <IconButton
-                    onClick={saveDateAndClose}
-                    aria-label="edit"
-                    color="success"
-                  >
-                    <Check />
-                  </IconButton>
-                  {/* TODO ensure exit cancels any changes */}
-                  <IconButton
-                    onClick={exitDateEdit}
-                    aria-label="close"
-                    color="error"
-                  >
-                    <Close />
-                  </IconButton>
-                </>
-              ) : (
-                <IconButton
-                  onClick={() => setEditModeForDate(true)}
-                  aria-label="edit"
-                >
-                  <Edit />
-                </IconButton>
-              )}
-            </Stack>
-          </Grid>
-          <Grid size={3}>
-            {editModeForTargetFrequency ? (
-              <>
-                <IconButton
-                  onClick={saveTargetFrequencyAndClose}
-                  aria-label="edit"
-                  color="success"
-                >
-                  <Check />
-                </IconButton>
-                <IconButton
-                  onClick={exitTargetFrequencyEdit}
-                  aria-label="close"
-                  color="error"
-                >
-                  <Close />
-                </IconButton>
-              </>
-            ) : (
-              <>
-                {targetCheckinFrequency || "unset"}
-                <IconButton
-                  onClick={() => setEditModeForTargetFrequency(true)}
-                  aria-label="edit"
-                >
-                  <Edit />
-                </IconButton>
-              </>
-            )}
-            {editModeForTargetFrequency && (
-              <Select
-                id="target-frequency"
-                value={
-                  targetFrequencyInputValue
-                    ? targetFrequencyInputValue
-                    : "unset"
-                }
-                onChange={(event) => {
-                  setTargetFrequencyInputValue(event.target.value as Frequency);
-                }}
-                label="frequency"
-              >
-                <MenuItem value={"unset"}>Unset</MenuItem>
-                <MenuItem value={"weekly"}>Weekly</MenuItem>
-                <MenuItem value={"fortnightly"}>Fortnightly</MenuItem>r
-                <MenuItem value={"monthly"}>Monthly</MenuItem>
-                <MenuItem value={"yearly"}>Yearly</MenuItem>
-              </Select>
-            )}
-          </Grid>
-        </Grid>
-      </Box>
+              {/* <Grid size={3}>
+                <EditableDateComponent
+                  dateValue={lastCheckin ? dayjs(new Date(lastCheckin)) : null}
+                  setDate={(inputValue) => {
+                    updateUserDefinedPpty(
+                      resourceName,
+                      etag,
+                      KEEPR_PPTIES.lastCheckin,
+                      inputValue.toDate().toDateString() // 'Sat Feb 15 2025'
+                    );
+                    // setLastCheckinInputValue(dayjs(lastCheckinInputValue));
+                    // saveDateAndClose();
+                  }}
+                />
+              </Grid> */}
+              {/* <Grid size={3}>
+                {editModeForTargetFrequency ? (
+                  <>
+                    <IconButton
+                      onClick={saveTargetFrequencyAndClose}
+                      aria-label="edit"
+                      color="success"
+                    >
+                      <Check />
+                    </IconButton>
+                    <IconButton
+                      onClick={exitTargetFrequencyEdit}
+                      aria-label="close"
+                      color="error"
+                    >
+                      <Close />
+                    </IconButton>
+                  </>
+                ) : (
+                  <>
+                    {targetCheckinFrequency || "unset"}
+                    <IconButton
+                      onClick={() => setEditModeForTargetFrequency(true)}
+                      aria-label="edit"
+                    >
+                      <Edit />
+                    </IconButton>
+                  </>
+                )}
+              </Grid> */}
+            </Grid>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
     </>
   );
 }
