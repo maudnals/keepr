@@ -12,20 +12,21 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
 body {
   margin: 0;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
 }
 
 h1 {
@@ -71,18 +72,19 @@ button:focus-visible {
   }
 }
 
-.MuiPaper-root {
-  --Paper-shadow: none !important;
-}
-
 button:focus {
   border: none;
   outline: none;
 }
 
-.MuiPaper-root.Mui-expanded {
-  margin: 0 !important;
-  background-color: whitesmoke;
-  border-top: solid 1px grey;
-  border-bottom: solid 1px grey;
+.empty-state {
+  opacity: 0.4;
+}
+
+.success {
+  color: #4caf50;
+}
+
+.error {
+  color: #f44336;
 }

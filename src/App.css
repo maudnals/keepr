@@ -14,9 +14,6 @@
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
 
 .logo.keepr {
   filter: drop-shadow(0 0 2em #f71bffee);
@@ -42,11 +39,7 @@
   padding: 2em;
 }
 
-.empty-state {
-  opacity: 0.4;
-}
-
-.persons-list-container {
+.persons-list-wrapper {
   margin-top: 3rem;
   margin-bottom: 5rem;
 }
@@ -60,4 +53,15 @@
   div {
     margin: 0 .4rem;
   }
+}
+
+.MuiPaper-root {
+  --Paper-shadow: none !important;
+}
+
+.MuiPaper-root.Mui-expanded {
+  margin: 0 !important;
+  background-color: whitesmoke;
+  border-top: solid 1px grey;
+  border-bottom: solid 1px grey;
 }
