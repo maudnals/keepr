@@ -1,4 +1,5 @@
 import PersonComponent from "./PersonComponent";
+import "./PersonsListComponent.css";
 
 interface PersonsListComponentProps {
   updateData: () => void;
