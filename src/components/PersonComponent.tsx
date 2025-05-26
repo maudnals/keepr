@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
@@ -41,29 +41,9 @@ export default function PersonComponent({
     userDefinedRaw,
   } = person;
 
-  // const [lastCheckinInputValue, setLastCheckinInputValue] = useState(
-  //   lastCheckin ? dayjs(new Date(lastCheckin)) : null
-  // );
-  const [editModeForTargetFrequency, setEditModeForTargetFrequency] =
-    useState(false);
   const [targetFrequencyInputValue, setTargetFrequencyInputValue] = useState(
     targetCheckinFrequency
   );
-
-  // useEffect(() => {
-  //   console.log(lastCheckinInputValue);
-  //   console.log(lastCheckinInputValue);
-  //   updateUserDefinedPpty(
-  //     resourceName,
-  //     etag,
-  //     KEEPR_PPTIES.lastCheckin,
-  //     lastCheckinInputValue.toDate().toDateString() // 'Sat Feb 15 2025'
-  //   );
-  // }, [lastCheckinInputValue]);
-
-  function exitTargetFrequencyEdit() {
-    setEditModeForTargetFrequency(false);
-  }
 
   function updateLastCheckinDateToToday() {
     const today = new Date();
@@ -76,26 +56,6 @@ export default function PersonComponent({
       today.toDateString() // 'Sat Feb 15 2025'
     );
   }
-
-  function saveDateAndClose() {
-    // resourceName = 'people/c1234567890'
-    // updateDate(resourceName, etag);
-    // console.log(lastCheckinInputValue);
-    // updateUserDefinedPpty(
-    //   resourceName,
-    //   etag,
-    //   KEEPR_PPTIES.lastCheckin,
-    //   lastCheckinInputValue.toDate().toDateString() // 'Sat Feb 15 2025'
-    // );
-  }
-
-  function saveTargetFrequencyAndClose() {
-    // resourceName = 'people/c1234567890'
-    updateTargetFrequency(resourceName, etag);
-    setEditModeForTargetFrequency(false);
-  }
-
-  // updateUserDefinedPpty(personId, etag, KEEPR_PPTIES.lastCheckin, lastCheckinInputValue.toDate().toDateString())
 
   // pptyName = KEEPR_PPTIES.lastCheckin;
   // pptyValue = lastCheckinInputValue.toDate().toDateString(); // 'Sat Feb 15 2025'
@@ -119,54 +79,6 @@ export default function PersonComponent({
     if (userDefinedRaw) {
       const existingPpties = userDefinedRaw.filter(
         (item: any) => item.value !== pptyName
-      );
-      if (existingPpties.length > 0) {
-        updatedUserDefinedPpties = [
-          ...existingPpties,
-          ...updatedUserDefinedPpties,
-        ];
-      }
-    }
-    console.log("updatedUserDefinedPpties", updatedUserDefinedPpties);
-    gapi.client.people.people
-      .updateContact({
-        resourceName: personId, // The resource name of the contact to update (important!)
-        etag: etag,
-        updatePersonFields: "userDefined", // Specifies which fields to update (crucial for partial updates)
-        userDefined: updatedUserDefinedPpties,
-      })
-      .then(
-        function (response) {
-          console.log("Contact updated: ", response.result);
-          updateData();
-        },
-        function (reason) {
-          console.error("Error updating contact: ", reason);
-        }
-      );
-  }
-
-  function updateDate(personId, etag) {
-    // TODO support setting this to unset
-    const updatedLastCheckin = lastCheckinInputValue.toDate().toDateString(); // 'Sat Feb 15 2025'
-    let updatedPptyToUpdate = {
-      value: KEEPR_PPTIES.lastCheckin,
-      key: updatedLastCheckin,
-    };
-
-    if (userDefinedRaw) {
-      const existing = userDefinedRaw.filter(
-        (item: any) => item.value === KEEPR_PPTIES.lastCheckin
-      )[0];
-      if (existing) {
-        updatedPptyToUpdate = { ...existing, ...updatedPptyToUpdate };
-      }
-    }
-    let updatedUserDefinedPpties = [updatedPptyToUpdate];
-
-    if (userDefinedRaw) {
-      const existingPpties = userDefinedRaw.filter(
-        (item: any) => item.value !== KEEPR_PPTIES.lastCheckin
       );
       if (existingPpties.length > 0) {
         updatedUserDefinedPpties = [
