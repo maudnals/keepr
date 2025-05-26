@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
-import Stack from "@mui/material/Stack";
-import IconButton from "@mui/material/IconButton";
-import { Check, Close, Edit } from "@mui/icons-material";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -269,7 +263,7 @@ export default function PersonComponent({
         </AccordionSummary>
         <AccordionDetails>
           <LabelledFieldComponent
-            label={isCheckinOverdue ? "Overdue by" : "Next check in due in..."}
+            label={isCheckinOverdue ? "Overdue by" : "Next check-in due in..."}
             value={
               targetCheckinFrequency
                 ? isCheckinOverdue
@@ -279,7 +273,7 @@ export default function PersonComponent({
             }
           />
           <LabelledFieldComponent
-            label="Last check in"
+            label="Last check-in"
             value={
               <EditableDateComponent
                 dateValue={lastCheckin ? dayjs(new Date(lastCheckin)) : null}
@@ -297,7 +291,7 @@ export default function PersonComponent({
             }
           />
           <LabelledFieldComponent
-            label="Target checkin frequency"
+            label="Target check-in frequency"
             value={
               <Select
                 id="target-frequency"
@@ -323,53 +317,7 @@ export default function PersonComponent({
                 justifyContent: "space-around",
                 alignItems: "center",
               }}
-            >
-              {/* <Grid size={3}>
-                <EditableDateComponent
-                  dateValue={lastCheckin ? dayjs(new Date(lastCheckin)) : null}
-                  setDate={(inputValue) => {
-                    updateUserDefinedPpty(
-                      resourceName,
-                      etag,
-                      KEEPR_PPTIES.lastCheckin,
-                      inputValue.toDate().toDateString() // 'Sat Feb 15 2025'
-                    );
-                    // setLastCheckinInputValue(dayjs(lastCheckinInputValue));
-                    // saveDateAndClose();
-                  }}
-                />
-              </Grid> */}
-              {/* <Grid size={3}>
-                {editModeForTargetFrequency ? (
-                  <>
-                    <IconButton
-                      onClick={saveTargetFrequencyAndClose}
-                      aria-label="edit"
-                      color="success"
-                    >
-                      <Check />
-                    </IconButton>
-                    <IconButton
-                      onClick={exitTargetFrequencyEdit}
-                      aria-label="close"
-                      color="error"
-                    >
-                      <Close />
-                    </IconButton>
-                  </>
-                ) : (
-                  <>
-                    {targetCheckinFrequency || "unset"}
-                    <IconButton
-                      onClick={() => setEditModeForTargetFrequency(true)}
-                      aria-label="edit"
-                    >
-                      <Edit />
-                    </IconButton>
-                  </>
-                )}
-              </Grid> */}
-            </Grid>
+            ></Grid>
           </Box>
         </AccordionDetails>
       </Accordion>

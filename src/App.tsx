@@ -11,7 +11,6 @@ import { Close } from "@mui/icons-material";
 import PersonsListComponent from "./components/PersonsListComponent";
 import { createPersonFromConnection } from "./utils/utils";
 import { AUTH_BUTTON_TEXT } from "./strings";
-import RefreshIcon from "@mui/icons-material/Refresh";
 
 const darkTheme = createTheme({
   palette: {
@@ -162,22 +161,22 @@ function App() {
         </div>
         <h1>keepr</h1>
         <div className="sign-in">
-            {localParams.tokenClient && localParams.gapi ? (
-              <div>
-                <Button onClick={authenticateAndSetData} variant="contained">
-                  {displayTextAuthButton}
-                </Button>
-              </div>
-            ) : (
-              <div>Not ready</div>
-            )}
-            {showSignoutButton && (
+          {localParams.tokenClient && localParams.gapi ? (
+            <div>
+              <Button onClick={authenticateAndSetData} variant="contained">
+                {displayTextAuthButton}
+              </Button>
+            </div>
+          ) : (
+            <div>Not ready</div>
+          )}
+          {showSignoutButton && (
             <div>
               <Button onClick={signout} variant="contained">
                 Sign out
               </Button>
             </div>
-            )}
+          )}
         </div>
         {/* Only show the UI when Authorized has been clicked i.e. a valid token is available */}
         {localParams.gapi.client.getToken() && (
@@ -224,27 +223,25 @@ function App() {
               updateData={authenticateAndSetData}
               personsList={overduePersons}
               listTitle={"To check-in with"}
-              listTitleColor={"primary"}
+              status={"error"}
               emptyStateText={"No one"}
-              columnHeaders={[
-                "Name",
-                "Overdue by",
-                "Last checked in",
-                "Target check-in frequency",
-              ]}
+              // columnHeaders={[
+              //   "Overdue by",
+              //   "Last checked in",
+              //   "Target check-in frequency",
+              // ]}
             />
             <PersonsListComponent
               updateData={authenticateAndSetData}
               personsList={onTrackPersons}
               listTitle={"On track"}
-              listTitleColor={"success"}
+              status={"success"}
               emptyStateText={"No one"}
-              columnHeaders={[
-                "Name",
-                "# Days until check-in",
-                "Last checked in",
-                "Target check-in frequency",
-              ]}
+              // columnHeaders={[
+              //   "# Days until check-in",
+              //   "Last checked in",
+              //   "Target check-in frequency",
+              // ]}
             />
           </>
         )}
