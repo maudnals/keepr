@@ -64,8 +64,6 @@ export function getOverdueDetails(now: number, person: Person) {
   let isCheckinOverdue = false;
   let overdueRatio = null;
 
-  console.log(person.targetCheckinFrequency);
-
   if (person.targetCheckinFrequency && person.lastCheckin) {
     const gapInMs = new Date(now).getTime() - person.lastCheckin.getTime();
     // Use Math.floor to be lax on checkin (laxer than Math.ceiling)
