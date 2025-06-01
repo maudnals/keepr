@@ -225,23 +225,14 @@ function App() {
               listTitle={"To check-in with"}
               status={"error"}
               emptyStateText={"No one"}
-              // columnHeaders={[
-              //   "Overdue by",
-              //   "Last checked in",
-              //   "Target check-in frequency",
-              // ]}
             />
+
             <PersonsListComponent
               updateData={authenticateAndSetData}
               personsList={onTrackPersons}
               listTitle={"On track"}
               status={"success"}
               emptyStateText={"No one"}
-              // columnHeaders={[
-              //   "# Days until check-in",
-              //   "Last checked in",
-              //   "Target check-in frequency",
-              // ]}
             />
           </>
         )}
