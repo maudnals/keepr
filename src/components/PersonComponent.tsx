@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid2";
 import dayjs from "dayjs";
@@ -40,10 +39,6 @@ export default function PersonComponent({
     overdueRatio,
     userDefinedRaw,
   } = person;
-
-  const [targetFrequencyInputValue, setTargetFrequencyInputValue] = useState(
-    targetCheckinFrequency
-  );
 
   function updateLastCheckinDateToToday() {
     const today = new Date();

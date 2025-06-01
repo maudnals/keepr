@@ -16,14 +16,6 @@ export const frequencyToDays = {
   [frequencies.weekly]: 7,
 };
 
-// enum Frequencies {
-//   yearly,
-//   quarterly,
-//   monthly,
-//   fortnightly,
-//   weekly,
-// }
-
 export const KEEPR_PPTIES = {
   lastCheckin: "lastCheckin",
   targetCheckinFrequency: "targetCheckinFrequency",
