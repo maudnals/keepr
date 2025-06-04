@@ -16,15 +16,15 @@ export const frequencyToDays = {
   [frequencies.weekly]: 7,
 };
 
-export const KEEPR_PPTIES = {
+export const PEOPLE_API_PROPERTIES = {
   lastCheckin: "lastCheckin",
   targetCheckinFrequency: "targetCheckinFrequency",
 };
 
-const keeprPptyValues = Object.values(KEEPR_PPTIES);
+const peopleApiPptyValues = Object.values(PEOPLE_API_PROPERTIES);
 
 export const validatorsParsers = {
-  [KEEPR_PPTIES.lastCheckin]: function (
+  [PEOPLE_API_PROPERTIES.lastCheckin]: function (
     lastCheckinValue: string,
     resourceName: string
   ) {
@@ -37,7 +37,7 @@ export const validatorsParsers = {
       return new Date(parsedDate);
     }
   },
-  [KEEPR_PPTIES.targetCheckinFrequency]: function (
+  [PEOPLE_API_PROPERTIES.targetCheckinFrequency]: function (
     targetCheckinFrequencyValue: Frequency,
     resourceName: string
   ) {
@@ -102,7 +102,7 @@ export function createPersonFromConnection(
   if (connection.userDefined) {
     connection.userDefined.forEach((entry) => {
       const { key, value } = entry;
-      if (keeprPptyValues.includes(value)) {
+      if (peopleApiPptyValues.includes(value)) {
         const parsed = validatorsParsers[value](key, person.resourceName);
         person = { ...person, [value]: parsed };
       }

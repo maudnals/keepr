@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import {
-  KEEPR_PPTIES,
+  PEOPLE_API_PROPERTIES,
   overdueRatioFormatter,
   remainingDaysUntilCheckinFormatter,
 } from "../utils/utils";
@@ -47,12 +47,12 @@ export default function PersonComponent({
     updateUserDefinedPpty(
       resourceName,
       etag,
-      KEEPR_PPTIES.lastCheckin,
+      PEOPLE_API_PROPERTIES.lastCheckin,
       today.toDateString() // 'Sat Feb 15 2025'
     );
   }
 
-  // pptyName = KEEPR_PPTIES.lastCheckin;
+  // pptyName = PEOPLE_API_PROPERTIES.lastCheckin;
   // pptyValue = lastCheckinInputValue.toDate().toDateString(); // 'Sat Feb 15 2025'
   function updateUserDefinedPpty(personId, etag, pptyName, pptyValue) {
     // TODO support setting this to unset
