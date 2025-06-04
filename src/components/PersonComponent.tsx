@@ -82,53 +82,8 @@ export default function PersonComponent({
         ];
       }
     }
-    console.log("updatedUserDefinedPpties", updatedUserDefinedPpties);
-    gapi.client.people.people
-      .updateContact({
-        resourceName: personId, // The resource name of the contact to update (important!)
-        etag: etag,
-        updatePersonFields: "userDefined", // Specifies which fields to update (crucial for partial updates)
-        userDefined: updatedUserDefinedPpties,
-      })
-      .then(
-        function (response) {
-          console.log("Contact updated: ", response.result);
-          updateData();
-        },
-        function (reason) {
-          console.error("Error updating contact: ", reason);
-        }
-      );
-  }
-
-  function updateTargetFrequency(personId, etag) {
-    // TODO support setting this to unset
-    let updatedPptyToUpdate = {
-      value: KEEPR_PPTIES.targetCheckinFrequency,
-      key: targetFrequencyInputValue,
-    };
-
-    if (userDefinedRaw) {
-      const existing = userDefinedRaw.filter(
-        (item: any) => item.value === KEEPR_PPTIES.targetCheckinFrequency
-      )[0];
-      if (existing) {
-        updatedPptyToUpdate = { ...existing, ...updatedPptyToUpdate };
-      }
     }
-    let updatedUserDefinedPpties = [updatedPptyToUpdate];
 
-    if (userDefinedRaw) {
-      const existingPpties = userDefinedRaw.filter(
-        (item: any) => item.value !== KEEPR_PPTIES.targetCheckinFrequency
-      );
-      if (existingPpties.length > 0) {
-        updatedUserDefinedPpties = [
-          ...existingPpties,
-          ...updatedUserDefinedPpties,
-        ];
-      }
-    }
     console.log("updatedUserDefinedPpties", updatedUserDefinedPpties);
     gapi.client.people.people
       .updateContact({
