@@ -38,10 +38,13 @@ export const validatorsParsers = {
     }
   },
   [PEOPLE_API_PROPERTIES.targetCheckinFrequency]: function (
-    targetCheckinFrequencyValue: Frequency,
+    targetCheckinFrequencyValue: Frequency | null,
     resourceName: string
   ) {
-    if (!frequencyValues.includes(targetCheckinFrequencyValue)) {
+    if (
+      !isFrequency(targetCheckinFrequencyValue) &&
+      targetCheckinFrequencyValue !== null
+    ) {
       throw new Error(
         `Error during data pulling for ${resourceName}: targetCheckinFrequency '${targetCheckinFrequencyValue}' is invalid.`
       );
@@ -50,6 +53,10 @@ export const validatorsParsers = {
     }
   },
 };
+
+export function isFrequency(value: any): value is Frequency {
+  return frequencyValues.includes(value);
+}
 
 export function getOverdueDetails(now: number, person: Person) {
   let diff = null;
