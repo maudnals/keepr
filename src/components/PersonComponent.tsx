@@ -5,6 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import {
   PEOPLE_API_PROPERTIES,
+  isFrequency,
   overdueRatioFormatter,
   remainingDaysUntilCheckinFormatter,
 } from "../utils/utils";
@@ -54,37 +55,55 @@ export default function PersonComponent({
 
   // pptyName = PEOPLE_API_PROPERTIES.lastCheckin;
   // pptyValue = lastCheckinInputValue.toDate().toDateString(); // 'Sat Feb 15 2025'
-  function updateUserDefinedPpty(personId, etag, pptyName, pptyValue) {
-    // TODO support setting this to unset
-    let updatedPptyToUpdate = {
-      value: pptyName,
-      key: pptyValue,
-    };
+  function updateUserDefinedPpty(personId, etag, pptyName, newPptyValue) {
+    const pptyToUpdate = userDefinedRaw.filter(
+      (item: any) => item.value === pptyName
+    )[0];
 
-    if (userDefinedRaw) {
-      const existing = userDefinedRaw.filter(
-        (item: any) => item.value === pptyName
-      )[0];
-      if (existing) {
-        updatedPptyToUpdate = { ...existing, ...updatedPptyToUpdate };
-      }
-    }
-    let updatedUserDefinedPpties = [updatedPptyToUpdate];
-
-    if (userDefinedRaw) {
-      const existingPpties = userDefinedRaw.filter(
-        (item: any) => item.value !== pptyName
-      );
-      if (existingPpties.length > 0) {
-        updatedUserDefinedPpties = [
-          ...existingPpties,
-          ...updatedUserDefinedPpties,
-        ];
-      }
-    }
+    if (!userDefinedRaw) {
+      // TODO userDefinedRaw doesn't exist in some cases, e.g. when the contact is created
+      // in the People API UI, so we need to handle that case
+      return;
     }
 
-    console.log("updatedUserDefinedPpties", updatedUserDefinedPpties);
+    let updatedUserDefinedPpties = [...userDefinedRaw];
+
+    if (newPptyValue === null || newPptyValue === undefined) {
+      // Case: Remove property
+      // If the property to update exists, remove it from the list of properties
+      updatedUserDefinedPpties = pptyToUpdate
+        ? userDefinedRaw.filter((item: any) => item.value !== pptyName)
+        : [...userDefinedRaw];
+    } else if (newPptyValue && pptyToUpdate) {
+      // case edit
+      updatedUserDefinedPpties = [
+        ...userDefinedRaw.filter(
+          (item: any) => item.value !== pptyName // Remove the property to update
+        ),
+        // Create a new property with the same metadata as pptyToUpdate
+        // but with the new value
+        {
+          ...pptyToUpdate,
+          // The new value and key are listed after pptyToUpdate in order to override the existing value
+          value: pptyName,
+          key: newPptyValue,
+        },
+      ];
+    } else if (newPptyValue && !pptyToUpdate) {
+      updatedUserDefinedPpties = [
+        ...userDefinedRaw,
+        // Create a new property with the same metadata as pptyToUpdate
+        // but with the new value
+        {
+          // The new value and key are listed after pptyToUpdate in order to override the existing value
+          value: pptyName,
+          key: newPptyValue,
+        },
+      ];
+    }
+
+    console.log("Updating user-defined properties:", updatedUserDefinedPpties);
+
     gapi.client.people.people
       .updateContact({
         resourceName: personId, // The resource name of the contact to update (important!)
@@ -143,11 +162,9 @@ export default function PersonComponent({
                   updateUserDefinedPpty(
                     resourceName,
                     etag,
-                    KEEPR_PPTIES.lastCheckin,
+                    PEOPLE_API_PROPERTIES.lastCheckin,
                     inputValue.toDate().toDateString() // 'Sat Feb 15 2025'
                   );
-                  // setLastCheckinInputValue(dayjs(lastCheckinInputValue));
-                  // saveDateAndClose();
                 }}
               />
             }
@@ -157,13 +174,24 @@ export default function PersonComponent({
             value={
               <Select
                 id="target-frequency"
-                value={targetCheckinFrequency ? targetCheckinFrequency : null}
+                value={targetCheckinFrequency || "unset"}
                 onChange={(event) => {
-                  setTargetFrequencyInputValue(event.target.value as Frequency);
+                  let newFrequency: Frequency | null = null;
+                  if (event.target.value === "unset") {
+                    newFrequency = null;
+                  } else if (isFrequency(event.target.value)) {
+                    newFrequency = event.target.value as Frequency;
+                  }
+                  updateUserDefinedPpty(
+                    resourceName,
+                    etag,
+                    PEOPLE_API_PROPERTIES.targetCheckinFrequency,
+                    newFrequency
+                  );
                 }}
                 label="frequency"
               >
-                {/* <MenuItem value={null}>Unset</MenuItem> */}
+                <MenuItem value={"unset"}>Unset</MenuItem>
                 <MenuItem value={"weekly"}>Weekly</MenuItem>
                 <MenuItem value={"fortnightly"}>Fortnightly</MenuItem>
                 <MenuItem value={"monthly"}>Monthly</MenuItem>
