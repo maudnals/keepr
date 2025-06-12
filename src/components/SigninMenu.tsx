@@ -27,7 +27,6 @@ export default function SigninMenu({
   };
 
   function handleSignout() {
-    console.log("Signing out...");
     signout();
     handleClose();
   }
@@ -38,9 +37,8 @@ export default function SigninMenu({
   }
 
   return (
-    <div>
+    <>
       <Button
-        id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
@@ -49,7 +47,6 @@ export default function SigninMenu({
         Menu
       </Button>
       <Menu
-        id="basic-menu"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -60,12 +57,14 @@ export default function SigninMenu({
         }}
       >
         <MenuItem onClick={handleAuth} className="auth-button">
-          {displayTextAuthButton}
+          <Button>{displayTextAuthButton}</Button>
         </MenuItem>
         {showSignoutButton && (
-          <MenuItem onClick={handleSignout}>Sign out</MenuItem>
+          <MenuItem onClick={handleSignout}>
+            <Button>Sign out</Button>
+          </MenuItem>
         )}
       </Menu>
-    </div>
+    </>
   );
 }
