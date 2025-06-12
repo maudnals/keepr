@@ -42,16 +42,7 @@ export default function SigninMenu({
       >
         Menu
       </Button>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        slotProps={{
-          list: {
-            "aria-labelledby": "basic-button",
-          },
-        }}
-      >
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={handleRefresh} className="auth-button">
           <Button>Refresh</Button>
         </MenuItem>
