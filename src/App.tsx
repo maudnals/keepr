@@ -161,7 +161,7 @@ function App() {
           </a>
         </div>
         <h1>keepr</h1>
-        <div>
+        <div className="menu-wrapper">
           {localParams.tokenClient && localParams.gapi ? (
             <SigninMenu
               showSignoutButton={showSignoutButton}
@@ -179,7 +179,7 @@ function App() {
             <TextField
               label="Search by name"
               variant="outlined"
-              size="medium"
+              fullWidth
               value={searchQuery}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 const userInput = event.target.value;
@@ -191,7 +191,7 @@ function App() {
                 }
               }}
             />
-            <div className="filter">
+            <div className="filter-button-wrapper">
               {filterMode && (
                 <Button
                   variant="contained"
