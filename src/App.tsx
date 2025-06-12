@@ -172,55 +172,37 @@ function App() {
           ) : (
             <div>Not ready</div>
           )}
-          {showSignoutButton && (
-            <div>
-              <Button onClick={signout} variant="contained">
-                Sign out
-              </Button>
-            </div>
-          )}
         </div>
         {/* Only show the UI when Authorized has been clicked i.e. a valid token is available */}
         {localParams.gapi.client.getToken() && (
           <>
-            <Grid
-              container
-              spacing={1}
-              sx={{
-                justifyContent: "space-around",
-                alignItems: "center",
+            <TextField
+              label="Search by name"
+              variant="outlined"
+              size="medium"
+              value={searchQuery}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const userInput = event.target.value;
+                if (userInput.trim() === "") {
+                  // Ensure the query can't be a series of spaces
+                  setSearchQuery("");
+                } else {
+                  setSearchQuery(event.target.value);
+                }
               }}
-            >
-              <Grid size={11}>
-                <TextField
-                  id="outlined-basic"
-                  label="Search by name"
-                  variant="outlined"
-                  size="medium"
-                  value={searchQuery}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    const userInput = event.target.value;
-                    if (userInput.trim() === "") {
-                      // Ensure the query can't be a series of spaces
-                      setSearchQuery("");
-                    } else {
-                      setSearchQuery(event.target.value);
-                    }
-                  }}
-                />
-              </Grid>
-              <Grid size={1}>
-                {filterMode && (
-                  <IconButton
-                    onClick={exitFilterMode}
-                    aria-label="close"
-                    color="error"
-                  >
-                    <Close />
-                  </IconButton>
-                )}
-              </Grid>
-            </Grid>
+            />
+            <div className="filter">
+              {filterMode && (
+                <Button
+                  variant="contained"
+                  onClick={exitFilterMode}
+                  endIcon={<Close />}
+                >
+                  Clear filter
+                </Button>
+              )}
+            </div>
+
             <PersonsListComponent
               updateData={authenticateAndSetData}
               personsList={overduePersons}
