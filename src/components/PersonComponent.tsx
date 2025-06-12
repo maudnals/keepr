@@ -184,12 +184,18 @@ export default function PersonComponent({
                 defaultValue={checkinNotes}
                 onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
                   const inputValue = event.target.value.trim();
-                  updateUserDefinedPpty(
-                    resourceName,
-                    etag,
-                    PEOPLE_API_PROPERTIES.checkinNotes,
-                    inputValue
-                  );
+                  const newCheckinNotes = inputValue === "" ? null : inputValue;
+                  if (
+                    checkinNotes !== newCheckinNotes
+                    // Update only if the value is changed
+                  ) {
+                    updateUserDefinedPpty(
+                      resourceName,
+                      etag,
+                      PEOPLE_API_PROPERTIES.checkinNotes,
+                      inputValue
+                    );
+                  }
                 }}
                 multiline
               />
