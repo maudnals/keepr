@@ -100,7 +100,7 @@ export function createPersonFromConnection(
       : "placeholder",
     isCheckinOverdue: false,
     diff: 0,
-    // TODO order: place unset at the bottom? alo, should we really reorder upon edit? could be confusing
+    // TODO order: place unset at the bottom? alo, should we really reorder the person list upon edit? could be confusing
     targetCheckinFrequency: null,
     lastCheckin: null,
     overdueRatio: 0,
@@ -117,6 +117,7 @@ export function createPersonFromConnection(
   }
   const overdueDetails = getOverdueDetails(now, person);
   person = { ...person, ...overdueDetails };
+  console.log(person);
   return person;
 }
 

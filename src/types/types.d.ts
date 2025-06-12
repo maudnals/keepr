@@ -21,9 +21,9 @@ interface Person {
   // Person's name
   name: string;
   // Desired check-in frequency
-  targetCheckinFrequency: null | Frequency;
+  targetCheckinFrequency: Frequency | null;
   // Last check-in date
-  lastCheckin: null | Date;
+  lastCheckin: Date | null;
   // Whether the checkin is overdue
   isCheckinOverdue: boolean;
   // Diff between checkin and now, in days. Can be negative (if on track) or positive (if overdue).
