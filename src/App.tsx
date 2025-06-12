@@ -4,13 +4,10 @@ import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Button from "@mui/material/Button";
-import Grid from "@mui/material/Grid2";
 import TextField from "@mui/material/TextField";
-import IconButton from "@mui/material/IconButton";
 import { Close } from "@mui/icons-material";
 import PersonsListComponent from "./components/PersonsListComponent";
 import { createPersonFromConnection } from "./utils/utils";
-import { AUTH_BUTTON_TEXT } from "./strings";
 import SigninMenu from "./components/SigninMenu";
 
 const lightTheme = createTheme({
@@ -23,11 +20,8 @@ function App() {
   const [persons, setPersons] = useState([]);
   const [overduePersons, setOverduePersons] = useState([]);
   const [onTrackPersons, setOnTrackPersons] = useState([]);
-  const [displayTextAuthButton, setDisplayTextAuthButton] = useState(
-    AUTH_BUTTON_TEXT.authorize
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showSignoutButton, setShowSignoutButton] = useState(false);
 
   const [filterMode, setFilterMode] = useState(false);
 
@@ -118,7 +112,7 @@ function App() {
       if (resp.error !== undefined) {
         throw resp;
       }
-      updateDisplay(AUTH_BUTTON_TEXT.refresh, true);
+      setIsAuthenticated(true);
       await setData();
     };
     if (localParams.gapi.client.getToken() === null) {
@@ -136,7 +130,7 @@ function App() {
     if (token !== null) {
       localParams.google.accounts.oauth2.revoke(token.access_token);
       localParams.gapi.client.setToken("");
-      updateDisplay(AUTH_BUTTON_TEXT.authorize, false);
+      setIsAuthenticated(false);
       resetData();
     }
   }
@@ -146,80 +140,83 @@ function App() {
     setOverduePersons([]);
   }
 
-  function updateDisplay(authButtonText: string, showSignoutButton: boolean) {
-    setDisplayTextAuthButton(authButtonText);
-    setShowSignoutButton(showSignoutButton);
-  }
-
   return (
     <>
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
-        <div>
-          <a>
-            <img src={keeprLogo} className="logo keepr" alt="Keepr logo" />
-          </a>
-        </div>
-        <h1>keepr</h1>
-        <div className="menu-wrapper">
-          {localParams.tokenClient && localParams.gapi ? (
-            <SigninMenu
-              showSignoutButton={showSignoutButton}
-              signout={signout}
-              authenticateAndSetData={authenticateAndSetData}
-              displayTextAuthButton={displayTextAuthButton}
-            />
-          ) : (
-            <div>Not ready</div>
-          )}
-        </div>
-        {/* Only show the UI when Authorized has been clicked i.e. a valid token is available */}
-        {localParams.gapi.client.getToken() && (
+        {/* localParams.tokenClient && localParams.gapi ? */}
+        {!isAuthenticated && (
           <>
-            <TextField
-              label="Search by name"
-              variant="outlined"
-              fullWidth
-              value={searchQuery}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const userInput = event.target.value;
-                if (userInput.trim() === "") {
-                  // Ensure the query can't be a series of spaces
-                  setSearchQuery("");
-                } else {
-                  setSearchQuery(event.target.value);
-                }
-              }}
-            />
-            <div className="filter-button-wrapper">
-              {filterMode && (
-                <Button
-                  variant="contained"
-                  onClick={exitFilterMode}
-                  endIcon={<Close />}
-                >
-                  Clear filter
-                </Button>
-              )}
+            <div>
+              <a>
+                <img src={keeprLogo} className="logo keepr" alt="Keepr logo" />
+              </a>
             </div>
-
-            <PersonsListComponent
-              updateData={authenticateAndSetData}
-              personsList={overduePersons}
-              listTitle={"To check-in with"}
-              status={"error"}
-              emptyStateText={"No one"}
-            />
-
-            <PersonsListComponent
-              updateData={authenticateAndSetData}
-              personsList={onTrackPersons}
-              listTitle={"On track"}
-              status={"success"}
-              emptyStateText={"No one"}
-            />
+            <h1>keepr</h1>
+            <Button
+              className="sign-in-button"
+              variant="contained"
+              onClick={authenticateAndSetData}
+            >
+              Sign in
+            </Button>
           </>
         )}
+        {isAuthenticated && (
+          <>
+            <div className="menu-wrapper">
+              <SigninMenu
+                signout={signout}
+                authenticateAndSetData={authenticateAndSetData}
+              />
+            </div>
+            {localParams.gapi.client.getToken() && (
+              <>
+                <TextField
+                  label="Search by name"
+                  variant="outlined"
+                  fullWidth
+                  value={searchQuery}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const userInput = event.target.value;
+                    if (userInput.trim() === "") {
+                      // Ensure the query can't be a series of spaces
+                      setSearchQuery("");
+                    } else {
+                      setSearchQuery(event.target.value);
+                    }
+                  }}
+                />
+                <div className="filter-button-wrapper">
+                  {filterMode && (
+                    <Button
+                      variant="contained"
+                      onClick={exitFilterMode}
+                      endIcon={<Close />}
+                    >
+                      Clear filter
+                    </Button>
+                  )}
+                </div>
+                <PersonsListComponent
+                  updateData={authenticateAndSetData}
+                  personsList={overduePersons}
+                  listTitle={"To check-in with"}
+                  status={"error"}
+                  emptyStateText={"No one"}
+                />
+                <PersonsListComponent
+                  updateData={authenticateAndSetData}
+                  personsList={onTrackPersons}
+                  listTitle={"On track"}
+                  status={"success"}
+                  emptyStateText={"No one"}
+                />
+              </>
+            )}
+          </>
+        )}
+        {/* Only show the UI when Sign in has been clicked i.e. a valid token is available */}
       </ThemeProvider>
     </>
   );
