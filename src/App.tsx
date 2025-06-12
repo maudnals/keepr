@@ -17,9 +17,9 @@ const lightTheme = createTheme({
 });
 
 function App() {
-  const [persons, setPersons] = useState([]);
-  const [overduePersons, setOverduePersons] = useState([]);
-  const [onTrackPersons, setOnTrackPersons] = useState([]);
+  const [persons, setPersons] = useState<Person[]>([]);
+  const [overduePersons, setOverduePersons] = useState<Person[]>([]);
+  const [onTrackPersons, setOnTrackPersons] = useState<Person[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
