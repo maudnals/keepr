@@ -12,7 +12,7 @@ import PersonsListComponent from "./components/PersonsListComponent";
 import { createPersonFromConnection } from "./utils/utils";
 import { AUTH_BUTTON_TEXT } from "./strings";
 
-const darkTheme = createTheme({
+const lightTheme = createTheme({
   palette: {
     mode: "light",
   },
@@ -152,7 +152,7 @@ function App() {
 
   return (
     <>
-      <ThemeProvider theme={darkTheme}>
+      <ThemeProvider theme={lightTheme}>
         <CssBaseline />
         <div>
           <a>
