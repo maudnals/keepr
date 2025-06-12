@@ -11,6 +11,7 @@ import { Close } from "@mui/icons-material";
 import PersonsListComponent from "./components/PersonsListComponent";
 import { createPersonFromConnection } from "./utils/utils";
 import { AUTH_BUTTON_TEXT } from "./strings";
+import SigninMenu from "./components/SigninMenu";
 
 const lightTheme = createTheme({
   palette: {
@@ -160,13 +161,14 @@ function App() {
           </a>
         </div>
         <h1>keepr</h1>
-        <div className="sign-in">
+        <div>
           {localParams.tokenClient && localParams.gapi ? (
-            <div>
-              <Button onClick={authenticateAndSetData} variant="contained">
-                {displayTextAuthButton}
-              </Button>
-            </div>
+            <SigninMenu
+              showSignoutButton={showSignoutButton}
+              signout={signout}
+              authenticateAndSetData={authenticateAndSetData}
+              displayTextAuthButton={displayTextAuthButton}
+            />
           ) : (
             <div>Not ready</div>
           )}
