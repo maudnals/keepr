@@ -5,31 +5,6 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.keepr {
-  filter: drop-shadow(0 0 2em #f71bffee);
-  animation: logo-spin infinite 20s linear;
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -56,8 +31,13 @@
   border-bottom: solid 1px grey;
 }
 
-.menu-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+}
+
+.sign-in-button {
+  margin: 3rem 0 !important;
 }

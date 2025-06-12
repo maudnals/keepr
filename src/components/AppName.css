@@ -1,0 +1,45 @@
+h1.small {
+    font-size: 1.2rem;
+    margin: 0;
+    text-align: left;
+}
+
+h1.large {
+    font-size: 3.2em;
+    line-height: 1.1;
+    margin: 0;
+    text-align: center;
+}
+
+.logo-large {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+    filter: drop-shadow(0 0 2em #f71bffee);
+    animation: logo-spin infinite 20s linear;
+}
+  
+.logo-large:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo-small {
+    height: 2rem;
+    padding: .2rem;
+}
+
+.logo-small-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+}
+
+@keyframes logo-spin {
+    from {
+    transform: rotate(0deg);
+    }
+    to {
+    transform: rotate(360deg);
+    }
+}

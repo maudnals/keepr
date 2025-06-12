@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import keeprLogo from "./assets/keepr.svg";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,6 +8,7 @@ import { Close } from "@mui/icons-material";
 import PersonsListComponent from "./components/PersonsListComponent";
 import { createPersonFromConnection } from "./utils/utils";
 import SigninMenu from "./components/SigninMenu";
+import AppName from "./components/AppName";
 
 const lightTheme = createTheme({
   palette: {
@@ -147,12 +147,7 @@ function App() {
         {/* localParams.tokenClient && localParams.gapi ? */}
         {!isAuthenticated && (
           <>
-            <div>
-              <a>
-                <img src={keeprLogo} className="logo keepr" alt="Keepr logo" />
-              </a>
-            </div>
-            <h1>keepr</h1>
+            <AppName size="large" />
             <Button
               className="sign-in-button"
               variant="contained"
@@ -164,7 +159,8 @@ function App() {
         )}
         {isAuthenticated && (
           <>
-            <div className="menu-wrapper">
+            <div className="app-header">
+              <AppName size="small" />
               <SigninMenu
                 signout={signout}
                 authenticateAndSetData={authenticateAndSetData}
