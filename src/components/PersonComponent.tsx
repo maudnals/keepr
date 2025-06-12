@@ -16,6 +16,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LabelledFieldComponent from "./LabelledFieldComponent";
 import EditableDateComponent from "./EditableDateComponent";
+import TextField from "@mui/material/TextField";
 
 interface PersonComponentProps {
   person: Person;
@@ -39,6 +40,7 @@ export default function PersonComponent({
     diff,
     overdueRatio,
     userDefinedRaw,
+    checkinNotes,
   } = person;
 
   function updateLastCheckinDateToToday() {
@@ -68,7 +70,11 @@ export default function PersonComponent({
 
     let updatedUserDefinedPpties = [...userDefinedRaw];
 
-    if (newPptyValue === null || newPptyValue === undefined) {
+    if (
+      newPptyValue === null ||
+      newPptyValue === undefined ||
+      newPptyValue === ""
+    ) {
       // Case: Remove property
       // If the property to update exists, remove it from the list of properties
       updatedUserDefinedPpties = pptyToUpdate
@@ -137,7 +143,7 @@ export default function PersonComponent({
             </Grid>
             <Grid size={6}>
               <Button onClick={updateLastCheckinDateToToday} variant="outlined">
-                Done
+                Done today
               </Button>
             </Grid>
           </Grid>
@@ -166,6 +172,26 @@ export default function PersonComponent({
                     inputValue.toDate().toDateString() // 'Sat Feb 15 2025'
                   );
                 }}
+              />
+            }
+          />
+          <LabelledFieldComponent
+            label="Notes"
+            value={
+              <TextField
+                label=""
+                variant="outlined"
+                defaultValue={checkinNotes}
+                onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                  const inputValue = event.target.value.trim();
+                  updateUserDefinedPpty(
+                    resourceName,
+                    etag,
+                    PEOPLE_API_PROPERTIES.checkinNotes,
+                    inputValue
+                  );
+                }}
+                multiline
               />
             }
           />

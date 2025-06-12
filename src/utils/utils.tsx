@@ -19,6 +19,7 @@ export const frequencyToDays = {
 export const PEOPLE_API_PROPERTIES = {
   lastCheckin: "lastCheckin",
   targetCheckinFrequency: "targetCheckinFrequency",
+  checkinNotes: "checkinNotes",
 };
 
 const peopleApiPptyValues = Object.values(PEOPLE_API_PROPERTIES);
@@ -50,6 +51,18 @@ export const validatorsParsers = {
       );
     } else {
       return targetCheckinFrequencyValue;
+    }
+  },
+  [PEOPLE_API_PROPERTIES.checkinNotes]: function (
+    checkinNotesValue: string | null,
+    resourceName: string
+  ) {
+    if (checkinNotesValue && typeof checkinNotesValue !== "string") {
+      throw new Error(
+        `Error during data pulling for ${resourceName}: checkinNotes '${checkinNotesValue}' is invalid.`
+      );
+    } else {
+      return checkinNotesValue;
     }
   },
 };
@@ -94,6 +107,7 @@ export function createPersonFromConnection(
   }
   let person: Person = {
     resourceName: connection.resourceName,
+    checkinNotes: null,
     etag: connection.etag,
     name: connection.names[0]
       ? connection?.names[0]?.displayName

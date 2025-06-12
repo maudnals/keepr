@@ -32,14 +32,41 @@ interface Person {
   overdueRatio: number;
   // Raw value for userDefined in incoming Google API objects of type connections
   userDefinedRaw: any
+  // Notes for the check-in, if any
+  checkinNotes: string | null;
 }
 // Example:
 // {
-//   "resourceName": "people/c439789064886940822",
-//   "name": "Andrea Fisher",
+//   "resourceName": "people/c7082907203174703430",
+//   "notes": "Upcoming project with his dad",
+//   "etag": "%Eg4BAgUHCQsWGScuNz0+PxoEAQIFByIMWlJhVGxJdmRlcGs9",
+//   "name": "Paul S",
 //   "isCheckinOverdue": true,
-//   "diff": 6,
-//   "targetCheckinFrequency": "monthly",
-//   "lastCheckin": "2025-01-01T00:00:00.000Z",
-//   "overdueRatio": 20
+//   "diff": 29,
+//   "targetCheckinFrequency": "weekly",
+//   "lastCheckin": "2025-05-06T22:00:00.000Z",
+//   "overdueRatio": 414,
+//   "userDefinedRaw": [
+//       {
+//           "metadata": {
+//               "primary": true,
+//               "source": {
+//                   "type": "CONTACT",
+//                   "id": "624b8a930e48a146"
+//               }
+//           },
+//           "key": "Wed May 07 2025",
+//           "value": "lastCheckin"
+//       },
+//       {
+//           "metadata": {
+//               "source": {
+//                   "type": "CONTACT",
+//                   "id": "624b8a930e48a146"
+//               }
+//           },
+//           "key": "weekly",
+//           "value": "targetCheckinFrequency"
+//       }
+//   ]
 // }
