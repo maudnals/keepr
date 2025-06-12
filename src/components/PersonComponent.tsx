@@ -144,7 +144,7 @@ export default function PersonComponent({
         </AccordionSummary>
         <AccordionDetails>
           <LabelledFieldComponent
-            label={isCheckinOverdue ? "Overdue by" : "Next check-in due in..."}
+            label={isCheckinOverdue ? "Overdue by" : "Next check-in due in"}
             value={
               targetCheckinFrequency
                 ? isCheckinOverdue
