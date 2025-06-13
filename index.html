@@ -15,6 +15,7 @@
     <script src="/src/api-config/secrets.tsx"></script>
     <script src="/src/api-config/config.tsx"></script>
     <script type="text/javascript">
+      
       let tokenClient;
       let gapiInited = false;
       let gisInited = false;
@@ -27,8 +28,8 @@
       // Callback after the API client is loaded. Loads the discovery doc to initialize the API
       async function initializeGapiClient() {
         await gapi.client.init({
-          apiKey: API_KEY,
-          discoveryDocs: [DISCOVERY_DOC],
+          apiKey: window.API_KEY,
+          discoveryDocs: [window.DISCOVERY_DOC],
         });
         gapiInited = true;
       }
@@ -37,8 +38,8 @@
       function gisLoaded() {
         console.log(CLIENT_ID);
         tokenClient = google.accounts.oauth2.initTokenClient({
-          client_id: CLIENT_ID,
-          scope: SCOPES,
+          client_id: window.CLIENT_ID,
+          scope: window.SCOPES,
           callback: "", // defined later
         });
         gisInited = true;
