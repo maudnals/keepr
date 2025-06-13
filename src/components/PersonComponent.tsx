@@ -57,7 +57,12 @@ export default function PersonComponent({
 
   // pptyName = PEOPLE_API_PROPERTIES.lastCheckin;
   // pptyValue = lastCheckinInputValue.toDate().toDateString(); // 'Sat Feb 15 2025'
-  function updateUserDefinedPpty(personId, etag, pptyName, newPptyValue) {
+  function updateUserDefinedPpty(
+    personId: string,
+    etag: string,
+    pptyName: string,
+    newPptyValue: any
+  ) {
     const pptyToUpdate = userDefinedRaw.filter(
       (item: any) => item.value === pptyName
     )[0];
@@ -118,11 +123,11 @@ export default function PersonComponent({
         userDefined: updatedUserDefinedPpties,
       })
       .then(
-        function (response) {
+        function (response: any) {
           console.log("Contact updated: ", response.result);
           updateData();
         },
-        function (reason) {
+        function (reason: any) {
           console.error("Error updating contact: ", reason);
         }
       );
@@ -165,12 +170,14 @@ export default function PersonComponent({
               <EditableDateComponent
                 dateValue={lastCheckin ? dayjs(new Date(lastCheckin)) : null}
                 setDate={(inputValue) => {
-                  updateUserDefinedPpty(
-                    resourceName,
-                    etag,
-                    PEOPLE_API_PROPERTIES.lastCheckin,
-                    inputValue.toDate().toDateString() // 'Sat Feb 15 2025'
-                  );
+                  if (inputValue) {
+                    updateUserDefinedPpty(
+                      resourceName,
+                      etag,
+                      PEOPLE_API_PROPERTIES.lastCheckin,
+                      inputValue.toDate().toDateString() // 'Sat Feb 15 2025'
+                    );
+                  }
                 }}
               />
             }
