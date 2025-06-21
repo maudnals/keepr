@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Close } from "@mui/icons-material";
 import PersonsListComponent from "./components/PersonsListComponent";
-import { createPersonFromConnection } from "./utils/utils";
+import { createPersonFromConnection, isTracked } from "./utils/utils";
 import SigninMenu from "./components/SigninMenu";
 import AppName from "./components/AppName";
 
@@ -20,6 +20,7 @@ function App() {
   const [persons, setPersons] = useState<Person[]>([]);
   const [overduePersons, setOverduePersons] = useState<Person[]>([]);
   const [onTrackPersons, setOnTrackPersons] = useState<Person[]>([]);
+  const [untrackedPersons, setUntrackedPersons] = useState<Person[]>([]);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -68,7 +69,7 @@ function App() {
     return (
       persons
         // Only keep persons for which the check-in is overdue
-        .filter((p: Person) => p.isCheckinOverdue)
+        .filter((p: Person) => isTracked(p) && p.isCheckinOverdue)
         // Order by overdue ratio (greater overdue ratios first)
         .sort((p1: Person, p2: Person) => p2.overdueRatio - p1.overdueRatio)
     );
@@ -77,11 +78,15 @@ function App() {
   function getSortedOnTrackPersonsFromPersons(persons: Person[]): Person[] {
     return (
       persons
-        // Only keep persons for which the check-in is not overdue
-        .filter((p: Person) => !p.isCheckinOverdue)
+        // Only keep persons that have a target and for which the check-in is not overdue
+        .filter((p: Person) => isTracked(p) && !p.isCheckinOverdue)
         // Order by # days until next check-in (lesser # first)
         .sort((p1: Person, p2: Person) => -(p2.diff - p1.diff))
     );
+  }
+
+  function getSortedUntrackedPersonsFromPersons(persons: Person[]): Person[] {
+    return persons.filter((p: Person) => !p.targetCheckinFrequency);
   }
 
   function filterPersons() {
@@ -91,6 +96,9 @@ function App() {
     );
     setOverduePersons(getSortedOverduePersonsFromPersons(filteredOutPersons));
     setOnTrackPersons(getSortedOnTrackPersonsFromPersons(filteredOutPersons));
+    setUntrackedPersons(
+      getSortedUntrackedPersonsFromPersons(filteredOutPersons)
+    );
   }
 
   async function setData() {
@@ -207,6 +215,16 @@ function App() {
                   listTitle={"On track"}
                   status={"success"}
                   emptyStateText={"No one"}
+                />
+                <PersonsListComponent
+                  updateData={authenticateAndSetData}
+                  personsList={untrackedPersons}
+                  listTitle={"Untracked"}
+                  status={"neutral"}
+                  emptyStateText={"No one"}
+                  subtitle={
+                    "To track, add both a target check-in frequency and a last check-in date."
+                  }
                 />
               </>
             )}

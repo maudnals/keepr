@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import {
   PEOPLE_API_PROPERTIES,
   isFrequency,
+  isTracked,
   overdueRatioFormatter,
   remainingDaysUntilCheckinFormatter,
 } from "../utils/utils";
@@ -63,17 +64,17 @@ export default function PersonComponent({
     pptyName: string,
     newPptyValue: any
   ) {
-    const pptyToUpdate = userDefinedRaw.filter(
+    const pptyToUpdate = userDefinedRaw?.filter(
       (item: any) => item.value === pptyName
     )[0];
 
-    if (!userDefinedRaw) {
-      // TODO userDefinedRaw doesn't exist in some cases, e.g. when the contact is created
-      // in the People API UI, so we need to handle that case
-      return;
-    }
+    // if (!pptyToUpdate) {
+    //   // TODO userDefinedRaw doesn't exist in some cases, e.g. when the contact is created
+    //   // in the People API UI, so we need to handle that case
+    //   return;
+    // }
 
-    let updatedUserDefinedPpties = [...userDefinedRaw];
+    let updatedUserDefinedPpties = userDefinedRaw ? [...userDefinedRaw] : [];
 
     if (
       newPptyValue === null ||
@@ -86,7 +87,7 @@ export default function PersonComponent({
         ? userDefinedRaw.filter((item: any) => item.value !== pptyName)
         : [...userDefinedRaw];
     } else if (newPptyValue && pptyToUpdate) {
-      // case edit
+      // Case: Edit property
       updatedUserDefinedPpties = [
         ...userDefinedRaw.filter(
           (item: any) => item.value !== pptyName // Remove the property to update
@@ -102,7 +103,7 @@ export default function PersonComponent({
       ];
     } else if (newPptyValue && !pptyToUpdate) {
       updatedUserDefinedPpties = [
-        ...userDefinedRaw,
+        userDefinedRaw ? [...userDefinedRaw] : [],
         // Create a new property with the same metadata as pptyToUpdate
         // but with the new value
         {
@@ -152,23 +153,25 @@ export default function PersonComponent({
                   onClick={updateLastCheckinDateToToday}
                   variant="outlined"
                 >
-                Done today
-              </Button>
+                  Done today
+                </Button>
               )}
             </Grid>
           </Grid>
         </AccordionSummary>
         <AccordionDetails>
-          <LabelledFieldComponent
-            label={isCheckinOverdue ? "Overdue by" : "Next check-in due in"}
-            value={
-              targetCheckinFrequency
-                ? isCheckinOverdue
-                  ? overdueRatioFormatter(overdueRatio, diff)
-                  : remainingDaysUntilCheckinFormatter(diff)
-                : "N/A"
-            }
-          />
+          {isTracked(person) && (
+            <LabelledFieldComponent
+              label={isCheckinOverdue ? "Overdue by" : "Next check-in due in"}
+              value={
+                targetCheckinFrequency
+                  ? isCheckinOverdue
+                    ? overdueRatioFormatter(overdueRatio, diff)
+                    : remainingDaysUntilCheckinFormatter(diff)
+                  : "N/A"
+              }
+            />
+          )}
           <LabelledFieldComponent
             label="Last check-in"
             value={

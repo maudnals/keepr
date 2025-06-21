@@ -7,6 +7,7 @@ interface PersonsListComponentProps {
   listTitle: string;
   status: "error" | "success" | "neutral";
   emptyStateText: string;
+  subtitle?: string;
 }
 
 export default function PersonsListComponent({
@@ -15,10 +16,12 @@ export default function PersonsListComponent({
   status,
   emptyStateText,
   updateData,
+  subtitle,
 }: PersonsListComponentProps) {
   return (
     <div className="persons-list-wrapper">
       <h2 className={status}>{listTitle}</h2>
+      {subtitle && <p className="subtitle">{subtitle}</p>}
       {personsList.length === 0 ? (
         <div className="empty-state">{emptyStateText}</div>
       ) : (
