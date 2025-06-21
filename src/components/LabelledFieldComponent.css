@@ -1,11 +1,13 @@
 .label {
     opacity: .4;
-    text-align: left;
+    text-align: right;
+    width: 7rem;
+    line-height: 1.2rem;
+    margin-right: 2ch;
 }
 
 .labelled-field-wrapper {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin: .2rem 0;
 }
