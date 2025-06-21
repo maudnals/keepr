@@ -188,32 +188,6 @@ export default function PersonComponent({
             }
           />
           <LabelledFieldComponent
-            label="Notes"
-            value={
-              <TextField
-                label=""
-                variant="outlined"
-                defaultValue={checkinNotes}
-                onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
-                  const inputValue = event.target.value.trim();
-                  const newCheckinNotes = inputValue === "" ? null : inputValue;
-                  if (
-                    checkinNotes !== newCheckinNotes
-                    // Update only if the value is changed
-                  ) {
-                    updateUserDefinedPpty(
-                      resourceName,
-                      etag,
-                      PEOPLE_API_PROPERTIES.checkinNotes,
-                      inputValue
-                    );
-                  }
-                }}
-                multiline
-              />
-            }
-          />
-          <LabelledFieldComponent
             label="Target check-in frequency"
             value={
               <Select
@@ -241,6 +215,32 @@ export default function PersonComponent({
                 <MenuItem value={"monthly"}>Monthly</MenuItem>
                 <MenuItem value={"yearly"}>Yearly</MenuItem>
               </Select>
+            }
+          />
+          <LabelledFieldComponent
+            label="Notes"
+            value={
+              <TextField
+                label=""
+                variant="outlined"
+                defaultValue={checkinNotes}
+                onBlur={(event: React.FocusEvent<HTMLInputElement>) => {
+                  const inputValue = event.target.value.trim();
+                  const newCheckinNotes = inputValue === "" ? null : inputValue;
+                  if (
+                    checkinNotes !== newCheckinNotes
+                    // Update only if the value is changed
+                  ) {
+                    updateUserDefinedPpty(
+                      resourceName,
+                      etag,
+                      PEOPLE_API_PROPERTIES.checkinNotes,
+                      inputValue
+                    );
+                  }
+                }}
+                multiline
+              />
             }
           />
           <Box sx={{ flexGrow: 1 }}>
