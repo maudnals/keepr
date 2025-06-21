@@ -20,17 +20,6 @@
   }
 }
 
-.MuiPaper-root {
-  --Paper-shadow: none !important;
-}
-
-.MuiPaper-root.Mui-expanded {
-  margin: 0 !important;
-  background-color: whitesmoke;
-  border-top: solid 1px grey;
-  border-bottom: solid 1px grey;
-}
-
 .app-header {
   display: flex;
   align-items: center;
@@ -40,4 +29,19 @@
 
 .sign-in-button {
   margin: 3rem 0 !important;
+}
+
+.MuiPaper-root.Mui-expanded {
+  margin: 0 !important;
+  background-color: whitesmoke;
+  border-top: solid 1px inherit;
+  border-bottom: solid 1px inherit;
+}
+
+.MuiAccordionSummary-content {
+  min-height: 38px;
+}
+
+.text-smaller {
+  font-size: smaller;
 }

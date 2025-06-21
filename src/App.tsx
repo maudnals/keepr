@@ -207,23 +207,26 @@ function App() {
                   personsList={overduePersons}
                   listTitle={"To check-in with"}
                   status={"error"}
-                  emptyStateText={"No one"}
+                  emptyStateText={
+                    "No one. To track a person, set both a target check-in frequency and a last check-in date."
+                  }
                 />
                 <PersonsListComponent
                   updateData={authenticateAndSetData}
                   personsList={onTrackPersons}
                   listTitle={"On track"}
                   status={"success"}
-                  emptyStateText={"No one"}
+                  emptyStateText={
+                    "No one. To track a person, set both a target check-in frequency and a last check-in date."
+                  }
                 />
                 <PersonsListComponent
                   updateData={authenticateAndSetData}
                   personsList={untrackedPersons}
                   listTitle={"Untracked"}
                   status={"neutral"}
-                  emptyStateText={"No one"}
-                  subtitle={
-                    "To track, add both a target check-in frequency and a last check-in date."
+                  emptyStateText={
+                    "No one. A person is untracked when the target check-in frequency or last check-in date aren't set."
                   }
                 />
               </>
