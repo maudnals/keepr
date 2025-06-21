@@ -69,6 +69,10 @@ button:focus {
   color: #f44336;
 }
 
+.neutral {
+  color: #787878;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
