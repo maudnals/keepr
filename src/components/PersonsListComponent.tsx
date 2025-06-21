@@ -5,7 +5,7 @@ interface PersonsListComponentProps {
   updateData: () => void;
   personsList: Person[];
   listTitle: string;
-  status: "error" | "success";
+  status: "error" | "success" | "neutral";
   emptyStateText: string;
 }
 
