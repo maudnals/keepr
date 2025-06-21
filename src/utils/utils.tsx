@@ -71,6 +71,10 @@ export function isFrequency(value: any): value is Frequency {
   return frequencyValues.includes(value);
 }
 
+export function isTracked(person: Person): boolean {
+  return !!(person.targetCheckinFrequency && person.lastCheckin);
+}
+
 export function getOverdueDetails(now: number, person: Person) {
   let diff = null;
   let isCheckinOverdue = false;
