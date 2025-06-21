@@ -1,12 +1,12 @@
 .persons-list-wrapper {
-    margin-top: 3rem;
-    margin-bottom: 5rem;
+    margin-top: 2rem;
+    margin-bottom: 4rem;
   }
 
 .subtitle {
     text-align: left;
     margin: -.4rem 0 0;
-    padding: .4rem 0;
+    padding: .4rem 0 1rem 0;
     line-height: normal;
     opacity: .4;
     font-style: italic;

@@ -1,3 +1,4 @@
+import Chip from "@mui/material/Chip";
 import PersonComponent from "./PersonComponent";
 import "./PersonsListComponent.css";
 
@@ -20,7 +21,9 @@ export default function PersonsListComponent({
 }: PersonsListComponentProps) {
   return (
     <div className="persons-list-wrapper">
-      <h2 className={status}>{listTitle}</h2>
+      <h2 className={status}>
+        {listTitle} <span className="text-smaller">({personsList.length})</span>
+      </h2>
       {subtitle && <p className="subtitle">{subtitle}</p>}
       {personsList.length === 0 ? (
         <div className="empty-state">{emptyStateText}</div>
