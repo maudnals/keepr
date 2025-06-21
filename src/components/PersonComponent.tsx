@@ -147,9 +147,14 @@ export default function PersonComponent({
               {devMode && etag}
             </Grid>
             <Grid size={6}>
-              <Button onClick={updateLastCheckinDateToToday} variant="outlined">
+              {isCheckinOverdue && (
+                <Button
+                  onClick={updateLastCheckinDateToToday}
+                  variant="outlined"
+                >
                 Done today
               </Button>
+              )}
             </Grid>
           </Grid>
         </AccordionSummary>
