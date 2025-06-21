@@ -232,7 +232,7 @@ export default function PersonComponent({
               >
                 <MenuItem value={"unset"}>Unset</MenuItem>
                 <MenuItem value={"weekly"}>Weekly</MenuItem>
-                <MenuItem value={"fortnightly"}>Fortnightly</MenuItem>
+                <MenuItem value={"fortnightly"}>Every other week</MenuItem>
                 <MenuItem value={"monthly"}>Monthly</MenuItem>
                 <MenuItem value={"yearly"}>Yearly</MenuItem>
               </Select>
